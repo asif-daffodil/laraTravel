@@ -7,38 +7,34 @@ use Illuminate\Http\Request;
 
 class FlightController extends Controller
 {
-    protected $apiService;
+    protected $travelvelaApiService;
 
-    public function __construct(TravelvelaApiService $apiService)
+    public function __construct(TravelvelaApiService $travelvelaApiService)
     {
-        $this->apiService = $apiService;
+        $this->travelvelaApiService = $travelvelaApiService;
     }
 
     public function searchForm()
     {
-        $cities = $this->apiService->getCitiesAndAirports();
+        $cities = $this->travelvelaApiService->getCitiesAndAirports();
         return view('flights.search', ['cities' => $cities ?? []]);
     }
 
     public function search(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'origin_location' => 'required',
             'destination_location' => 'required',
             'departure_date' => 'required|date',
+            // other fields
         ]);
 
-        $data = $request->only([
-            'origin_location', 'destination_location',
-            'departure_date', 'return_date', 'cabin_class',
-            'traveler', 'traveler_child', 'traveler_infant'
-        ]);
+        $flights = $this->travelvelaApiService->makeRequest(
+            'POST',
+            '/flight/search',
+            $data
+        );
 
-        $flights = $this->apiService->searchFlights($data);
-
-        return view('flights.results', [
-            'flights' => $flights ?? [],
-            'searchParams' => $data
-        ]);
+        return view('flights.results', ['flights' => $flights]);
     }
 }

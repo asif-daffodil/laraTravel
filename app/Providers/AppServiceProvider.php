@@ -10,11 +10,11 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void
+    public function register()
     {
-        $this->app->singleton(TravelvelaService::class, function ($app) {
-        return new TravelvelaService();
-    });
+        $this->app->singleton(\App\Services\TravelvelaApiService::class, function ($app) {
+            return new \App\Services\TravelvelaApiService();
+        });
     }
 
     /**

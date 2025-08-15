@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    protected $apiService;
+    protected $travelvelaApiService;
 
-    public function __construct(TravelvelaApiService $apiService)
+    public function __construct(TravelvelaApiService $travelvelaApiService)
     {
-        $this->apiService = $apiService;
+        $this->travelvelaApiService = $travelvelaApiService;
     }
 
     public function showLoginForm()
@@ -23,19 +23,22 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
-        $response = $this->apiService->login([
+        $response = $this->travelvelaApiService->login([
             'email' => $request->email,
             'password' => $request->password
         ]);
 
-        if (isset($response['error'])) {
-            return back()->with('error', $response['error']);
+        if (isset($response['token'])) {
+            session(['api_token' => $response['token']]);
+            return redirect()->intended('/dashboard');
         }
 
-        return redirect()->intended('/dashboard');
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
 
     public function showRegistrationForm()
@@ -52,7 +55,7 @@ class AuthController extends Controller
             'contact' => 'required'
         ]);
 
-        $response = $this->apiService->register([
+        $response = $this->travelvelaApiService->register([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
@@ -68,7 +71,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-        $this->apiService->logout();
+        $this->travelvelaApiService->logout();
         return redirect('/');
     }
 }
