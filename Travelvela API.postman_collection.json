@@ -1,0 +1,1912 @@
+{
+	"info": {
+		"_postman_id": "2154f5bf-214d-4cb6-9c90-bc404d222722",
+		"name": "Travelvela API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9320515"
+	},
+	"item": [
+		{
+			"name": "Blogs",
+			"item": [
+				{
+					"name": "BlogCategories",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://admin.travelvela.com/api/get/blog/categories",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"get",
+								"blog",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Blogs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://admin.travelvela.com/api/get/blog/list",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"get",
+								"blog",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Blog Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://admin.travelvela.com/api/blog/details/china-air-ticket-at-a-cheap-price",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"blog",
+								"details",
+								"china-air-ticket-at-a-cheap-price"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Categorywise Blogs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/get/blogs/categorywise/ertert",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"get",
+								"blogs",
+								"categorywise",
+								"ertert"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Flights",
+			"item": [
+				{
+					"name": "Cities & Airports",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://admin.travelvela.com/api/cities/airports",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"cities",
+								"airports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Cities & Airports",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "keyword",
+									"value": "DAC",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/search/cities/airports",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"search",
+								"cities",
+								"airports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Flights",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "origin_location",
+									"value": "DAC",
+									"type": "text"
+								},
+								{
+									"key": "destination_location",
+									"value": "CAN",
+									"type": "text"
+								},
+								{
+									"key": "departure_date",
+									"value": "2025-08-16",
+									"type": "text"
+								},
+								{
+									"key": "return_date",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "cabin_class",
+									"value": "Economy",
+									"description": "Business/Economy",
+									"type": "text"
+								},
+								{
+									"key": "traveler",
+									"value": "1",
+									"description": "Adult",
+									"type": "text"
+								},
+								{
+									"key": "traveler_child",
+									"value": "0",
+									"description": "Child",
+									"type": "text"
+								},
+								{
+									"key": "traveler_infant",
+									"value": "0",
+									"description": "Infant",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/flight/search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"flight",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Flight Booking (Login)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "114|Pks7VgQ7JX17PUo7VW8ijKycBACCXRBzVX9ajNlg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"price_id\": \"12-15-2-10-4829348822_2DACDELAI238~119302278\", //You can find this in search response of Tripjack (Can also be null for demostic flights)\r\n    \"passenger_email\": \"test@gmail.com\",\r\n    \"passenger_phone\": \"01755441100\",\r\n    \"origin_location\": \"DAC\",\r\n    \"origin_datetime\": \"2024-10-30T21:00\",\r\n    \"origin_carrier_info\": \"Air India (AI) 6467 320\",\r\n    \"destination_location\": \"DEL\",\r\n    \"destination_datetime\": \"2024-10-12T12:30\",\r\n    \"destination_carrier_info\": \"Air India (AI) 6467 320\",\r\n    \"oneWay\": \"1\",\r\n    \"duration\": \"170\",\r\n    \"base\": \"7895\",\r\n    \"grandTotal\": \"11301\",\r\n    \"no_of_seats\": 2,\r\n    \"adults\": 1,\r\n    \"infants\": 0,\r\n    \"childs\": 1,\r\n    \"class\": 0,\r\n    \"segments\": [\r\n        {\r\n            \"departure\":\r\n            {\r\n                \"OriginAirPortName\":\"Hazrat Shahjalal Intl Arpt\",\r\n                \"OriginLocationName\":\"Dhaka, Bangladesh\",\r\n                \"DepartureTimeFormated\":\"2024-10-30 09:00:00 pm\",\r\n                \"DepartureTimeFormated2Date\":\"30th October 2024\",\r\n                \"DepartureTimeFormated2Time\":\"09:00 pm\",\r\n                \"at\":\"2024-10-30T21:00\",\r\n                \"terminal\":\"Terminal 2\",\r\n                \"iataCode\":\"DAC\"\r\n            },\r\n            \"arrival\":\r\n            {\r\n                \"DestinationAirPortName\":\"Delhi indira gandhi intl\",\r\n                \"DestinationLocationName\":\"Delhi, India\",\r\n                \"ArrivalTimeFormated\":\"2024-10-30 11:20:00 pm\",\r\n                \"ArrivalTimeFormated2Date\":\"30th October 2024\",\r\n                \"ArrivalTimeFormated2Time\":\"11:20 pm\",\r\n                \"iataCode\":\"DEL\",\r\n                \"terminal\":\"Terminal 3\",\r\n                \"at\":\"2024-10-30T23:20\"\r\n            },\r\n            \"LayoverTime\":null,\r\n            \"OperatingCarrier\":\"Air India (AI)\",\r\n            \"FlightNumber\":\"238\",\r\n            \"AirBaggageAllowance\":\"30 Kilograms\",\r\n            \"carrierCode\":\"AI\",\r\n            \"aircraft\":\r\n            {\r\n                \"code\":\"238\"\r\n            },\r\n            \"duration\":170,\r\n            \"Equipment\":\"32A\"\r\n        }\r\n    ],\r\n    \"return_segments\": null,\r\n    // flight passangers info\r\n    \"title\": [\"MR\", \"MRS\"],\r\n    \"first_name\": [\"Fahim\", \"Sara\"],\r\n    \"last_name\": [\"Hossain\", \"Ahmed\"],\r\n    \"birth_date\": [\"2022-12-01\", \"1995-06-15\"],\r\n    \"passport_no\": [\"A1234567\", \"B7654321\"],\r\n    \"passport_expiry_date\": [\"2030-12-01\", \"2029-05-20\"],\r\n    \"gender\": [\"Male\", \"Female\"],\r\n    \"frequent_flyer_no\": [\"FF12345\", \"FF67890\"]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/book/flight",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"book",
+								"flight"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Flight Bookings (Login)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "114|Pks7VgQ7JX17PUo7VW8ijKycBACCXRBzVX9ajNlg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://admin.travelvela.com/api/my/flight/booking",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"my",
+								"flight",
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Flight Booking Details (Login)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "106|VJQTBVIAu3M5reBJURpVXkwyFILwgabctOu3OS0q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/flight/booking/details/70QWr1747905264",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"flight",
+								"booking",
+								"details",
+								"70QWr1747905264"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Authentication",
+			"item": [
+				{
+					"name": "User Registration",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Fahim",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "fahimmit05@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								},
+								{
+									"key": "contact",
+									"value": "+4915736108363",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/user/registration",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"user",
+								"registration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Verification",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "code",
+									"value": "725738",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "fahimmit05@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/user/verification",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"user",
+								"verification"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "fahimmit05@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/user/login",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forget Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "alifhossain176@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/forget/password",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"forget",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "code",
+									"value": "981679",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "alifhossain176@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/password/reset",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"password",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Info (Login Required)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "111|bAh5DE4cr3aXIzAIdLvcV4cCCJN875h19h6GXSbM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://admin.travelvela.com/api/user",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Profile Uodate (Login Required)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "111|bAh5DE4cr3aXIzAIdLvcV4cCCJN875h19h6GXSbM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Fahim Hossain",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "fahimmit05@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "4915736108363",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/alifh/Downloads/DSC_3918-removebg-preview(1).jpg"
+								},
+								{
+									"key": "old_password",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/user/profile/update",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"user",
+								"profile",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout (Login Required)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "110|Cauy04xlq6l52SM75GW8s0U1iqqdugJS17HfjFZR",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://admin.travelvela.com/api/logout",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tour Packages",
+			"item": [
+				{
+					"name": "Featured Tour Packages",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://admin.travelvela.com/api/featured/tour/packages",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"featured",
+								"tour",
+								"packages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Tour Packages",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://admin.travelvela.com/api/tour/packages",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"tour",
+								"packages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Random Tour Packages",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://admin.travelvela.com/api/random/tour/packages",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"random",
+								"tour",
+								"packages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Tour Location",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "location_name",
+									"value": "Darjeeling",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/search/tour/locations",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"search",
+								"tour",
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Tour Package",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "location_id",
+									"value": "9420",
+									"type": "text"
+								},
+								{
+									"key": "tour_date",
+									"value": "2024-12-05",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/search/tour/packages",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"search",
+								"tour",
+								"packages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tour Package Details",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "slug",
+									"value": "Ki5434",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/tour/package/details",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"tour",
+								"package",
+								"details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tour Package Booking (Login)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "8|KPhxJsZ4Do9owoVFposCSOiycLMWQeQJEc9iEE6m",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "package_id",
+									"value": "7",
+									"type": "text"
+								},
+								{
+									"key": "adults",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "child",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "infant",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "firstname",
+									"value": "Fahim",
+									"type": "text"
+								},
+								{
+									"key": "lastname",
+									"value": "Hossain",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "alifhossain174@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "contact",
+									"value": "01969005035",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "Dhaka, Bangladesh",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Dhaka",
+									"type": "text"
+								},
+								{
+									"key": "zip_code",
+									"value": "1207",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Bangladesh",
+									"type": "text"
+								},
+								{
+									"key": "short_note",
+									"value": "I need some emergency Medical support",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/tour/package/booking",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"tour",
+								"package",
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Tour Bookings (Login)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "8|KPhxJsZ4Do9owoVFposCSOiycLMWQeQJEc9iEE6m",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/my/tour/bookings",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"my",
+								"tour",
+								"bookings"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Hotel",
+			"item": [
+				{
+					"name": "Featured Hotels (by Travelvela)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://admin.travelvela.com/api/featured/hotels",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"featured",
+								"hotels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Hotel Locations",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "keyword",
+									"value": "Dubai",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/search/hotel/locations",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"search",
+								"hotel",
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Hotels",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"checkin_date\": \"2025-08-02\",\r\n    \"checkout_date\": \"2025-08-04\",\r\n    \"location_id\": 3899,\r\n    \"ratings\": [\r\n        0,\r\n        1,\r\n        2,\r\n        3,\r\n        4,\r\n        5\r\n    ],\r\n    \"room_info\": [\r\n        {\r\n            \"adults\": 2,\r\n            \"child\": 2,\r\n            \"child_age\": [\r\n                5,\r\n                12\r\n            ]\r\n        }\r\n        // {\r\n        //     \"adults\": 1,\r\n        //     \"child\": 0\r\n        // }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/search/hotels",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"search",
+								"hotels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Hotel Booking (Login)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "129|uht2k17yxne6Yxsj0E77UdPkMfsg3zL8W4bbaCLv",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hotel_data_provider\": \"travelvela\", //or \"tripjack\"\r\n    \"hotel_id\": \"hsid7904160278-39611795\",\r\n    \"hotel_email\": \"support@travelvela.com\",\r\n    \"hotel_phone\": \"+8809638-230230\",\r\n    \"hotel_name\": \"Jatra FlagShip Chattogram City Center\",\r\n    \"hotel_rating\": 4,\r\n    \"hotel_latitude\": \"139.7715\",\r\n    \"hotel_longitude\": \"139.7715\",\r\n    \"hotel_address\": \"Plot: 42, Road: 03, Nasirabad Properties, South Khulshi, 4225 Chittagong\",\r\n    \"hotel_city\": \"Dhaka\",\r\n\r\n    \"checkin_date\": \"2025-05-03\",\r\n    \"checkout_date\": \"2025-05-05\",\r\n    \"first_name\": \"Md Fahim\",\r\n    \"last_name\": \"Hossain\",\r\n    \"guest_email\": \"alifhossain174@gmail.com\",\r\n    \"guest_contact\": \"01969005035\",\r\n    \"guest_address\": \"Gulshan\",\r\n    \"guest_city\": \"Dhaka\",\r\n    \"guest_zip_code\": \"1207\",\r\n    \"guest_country\": \"Bangladesh\",\r\n    \"short_note\" : \"Test Booking\",\r\n    \"total_guests\": 4,\r\n    \"price\": 123123,\r\n    \"currency\": \"BDT\",\r\n\r\n    \"booked_rooms\": {\r\n        \"option_id\": \"63_0_127904\",\r\n        \"room\": [\r\n            {\r\n                \"room_id\": \"\",\r\n                \"room_category\": \"Deluxe Room\",\r\n                \"adult\": 1,\r\n                \"child\": 1,\r\n                \"meal_info\": \"Room Only\",\r\n                \"price\": \"4285\",\r\n                \"discount_price\": \"4285\"\r\n            }\r\n        ]\r\n    },\r\n\r\n    \"room_travellers_info\": [\r\n        {\r\n            \"travellerInfo\": [\r\n                {\r\n                    \"fN\": \"testuser\",\r\n                    \"lN\": \"sdfsd\",\r\n                    \"ti\": \"Mr\",\r\n                    \"pt\": \"ADULT\"\r\n                },\r\n                {\r\n                    \"fN\": \"testtwo\",\r\n                    \"lN\": \"sdfsd\",\r\n                    \"ti\": \"Master\",\r\n                    \"pt\": \"CHILD\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://admin.travelvela.com/api/book/hotel",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"book",
+								"hotel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Hotel Bookings (Login)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "112|86kPIdoNJaG5yLeeAPDW9T0hGGcrCdqFJd3EC8Ym",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://admin.travelvela.com/api/my/hotel/bookings",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"my",
+								"hotel",
+								"bookings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Hotel Booking Details (Login)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "112|86kPIdoNJaG5yLeeAPDW9T0hGGcrCdqFJd3EC8Ym",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "AuthHeader",
+								"value": "TravelVela-DYSBW7537NUDD7078",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "genesis",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ERTYUIO87347854",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://admin.travelvela.com/api/hotel/booking/details/PzNhR1747919864",
+							"protocol": "https",
+							"host": [
+								"admin",
+								"travelvela",
+								"com"
+							],
+							"path": [
+								"api",
+								"hotel",
+								"booking",
+								"details",
+								"PzNhR1747919864"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Available Payment Gateways",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "AuthHeader",
+						"value": "TravelVela-DYSBW7537NUDD7078",
+						"type": "text"
+					},
+					{
+						"key": "username",
+						"value": "genesis",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "ERTYUIO87347854",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://admin.travelvela.com/api/available/payment/gateways",
+					"protocol": "https",
+					"host": [
+						"admin",
+						"travelvela",
+						"com"
+					],
+					"path": [
+						"api",
+						"available",
+						"payment",
+						"gateways"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intiate Payment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "AuthHeader",
+						"value": "TravelVela-DYSBW7537NUDD7078",
+						"type": "text"
+					},
+					{
+						"key": "username",
+						"value": "genesis",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "ERTYUIO87347854",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"gateway\": \"sslcommerz\", //sslcommerz, bkash\r\n  \"module\": \"flight\", //hotel, tour (flight=>Flight Booking No; hotel=>Hotel Booking No; tour=>Tour Slug)\r\n  \"booking_no\": \"123123\",\r\n  \"name\": \"Fahim Hossain\",\r\n  \"email\": \"fahimmit05@gmail.com\",\r\n  \"phone\": \"01969005035\",\r\n  \"amount\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://admin.travelvela.com/api/initiate-payment",
+					"protocol": "https",
+					"host": [
+						"admin",
+						"travelvela",
+						"com"
+					],
+					"path": [
+						"api",
+						"initiate-payment"
+					]
+				}
+			},
+			"response": []
+		}
+	,
+	{
+		"name": "Auth",
+		"item": [
+			{
+				"name": "Register",
+				"request": {
+					"method": "POST",
+					"header": [
+						{
+							"key": "Accept",
+							"value": "application/json",
+							"type": "text"
+						}
+					],
+					"body": {
+						"mode": "raw",
+						"raw": "{\r\n  \"name\": \"John Doe\",\r\n  \"email\": \"john@example.com\",\r\n  \"password\": \"secret123\",\r\n  \"password_confirmation\": \"secret123\"\r\n}",
+						"options": {
+							"raw": {
+								"language": "json"
+							}
+						}
+					},
+					"url": {
+						"raw": "https://admin.travelvela.com/api/register",
+						"protocol": "https",
+						"host": [
+							"admin",
+							"travelvela",
+							"com"
+						],
+						"path": [
+							"api",
+							"register"
+						]
+					}
+				},
+				"response": []
+			}
+		]
+	]
+}

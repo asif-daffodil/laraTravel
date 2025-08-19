@@ -133,3 +133,21 @@ Route::get('/user-dashboard-wishlist', function () {
 Route::get('/user-profile', function () {
     return view('user-profile');
 });
+
+// Email verification page
+Route::get('/verify-email', function () {
+    return view('verify-email');
+})->name('verify.email');
+
+Route::post('/verify-email', function (Illuminate\Http\Request $request) {
+    $data = $request->validate([
+        'code' => 'required|string',
+        'email' => 'required|email',
+        'password' => 'required|string|min:6',
+    ]);
+
+    // Minimal placeholder handling: flash success and redirect back.
+    // Replace this with real verification logic as needed.
+    session()->flash('verify_success', 'Verification submitted. We will process it.');
+    return redirect()->back();
+})->name('verify.email.submit');

@@ -98,6 +98,10 @@
                               <a href="{{url('/user-profile')}}">User profile</a>
                             </li>
                             <li>
+                              <a href="{{url('/verify-email')}}">Verify Email</a>
+                            </li>
+
+                            <li>
                               <a href="{{url('/recover')}}">recover password</a>
                             </li>
                             <li>
@@ -138,6 +142,7 @@
                   <div class="header-right-action main-header">
                     <a
                       href="#"
+                      id="signupBtn"
                       class="theme-btn theme-btn-small theme-btn-transparent"
                       data-bs-toggle="modal"
                       data-bs-target="#signupPopupForm"
@@ -145,11 +150,23 @@
                     >
                     <a
                       href="#"
+                      id="loginBtn"
                       class="theme-btn theme-btn-small"
                       data-bs-toggle="modal"
                       data-bs-target="#loginPopupForm"
                       >Login</a
                     >
+
+                    <div id="userDropdown" class="dropdown dropdown-menu-start d-inline-block" style="display:none !important;">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" id="userDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span id="userDropdownName">User</span>
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="userDropdownBtn">
+                        <li><a class="dropdown-item" href="/user-profile">Get User Info</a></li>
+                        <li><a class="dropdown-item" href="/user-dashboard-profile">User Profile Update</a></li>
+                        <li><a class="dropdown-item" href="#" id="logoutLink">Logout</a></li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -158,3 +175,10 @@
         </div>
       </div>
     </header>
+
+    <script>
+        if (!localStorage.getItem('loginData')) {
+        document.getElementById('userDropdown').classList.remove("d-inline-block")
+        document.getElementById('userDropdown').classList.add("d-none")
+        }
+    </script>
