@@ -9,6 +9,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>@yield('title', 'TravelVela - Travel Booking HTML Template')</title>
 
+    @stack('meta')
+
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/favicon.png') }}" />
 

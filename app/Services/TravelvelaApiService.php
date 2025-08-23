@@ -14,11 +14,12 @@ class TravelvelaApiService
     public function __construct()
     {
         $this->client = new Client();
-        $this->baseUrl = config('travelvela.api_url');
+        // Default to the public TravelVela admin API and credentials if not configured
+        $this->baseUrl = config('travelvela.api_url', 'https://admin.travelvela.com/api');
         $this->headers = [
-            'Authorization' => config('travelvela.auth_header'),
-            'username' => config('travelvela.username'),
-            'password' => config('travelvela.password'),
+            'Authorization' => config('travelvela.auth_header', 'TravelVela-DYSBW7537NUDD7078'),
+            'username' => config('travelvela.username', 'genesis'),
+            'password' => config('travelvela.password', 'ERTYUIO87347854'),
             'Accept' => 'application/json',
         ];
     }
@@ -37,15 +38,27 @@ class TravelvelaApiService
     public function makeRequest($method, $endpoint, $data = [])
     {
         try {
-            $response = $this->client->request($method, $this->baseUrl . $endpoint, [
+            $options = [
                 'headers' => $this->getAuthHeaders(),
-                'form_params' => $data
-            ]);
+            ];
+
+            if ($method === 'GET' && !empty($data)) {
+                $options['query'] = $data;
+            } elseif ($method !== 'GET') {
+                $options['form_params'] = $data;
+            }
+
+            $response = $this->client->request($method, $this->baseUrl . $endpoint, $options);
 
             return json_decode($response->getBody(), true);
         } catch (\Exception $e) {
             return ['error' => $e->getMessage()];
         }
+    }
+
+    public function get($endpoint, $data = [])
+    {
+        return $this->makeRequest('GET', $endpoint, $data);
     }
 
     // Authentication methods
@@ -81,10 +94,28 @@ class TravelvelaApiService
         return $this->makeRequest('GET', '/get/blog/list');
     }
 
+    public function getBlogDetails($slug)
+    {
+        return $this->makeRequest('GET', "/blog/details/{$slug}");
+    }
+
     // Flight methods
     public function getCitiesAndAirports()
     {
-        return $this->makeRequest('GET', '/cities/airports');
+        try {
+            // Use direct headers without session token for this specific API
+            $options = [
+                'headers' => $this->headers, // Use original headers, not getAuthHeaders()
+                // Some environments may need to skip SSL verification for this external host
+                'verify' => false,
+            ];
+
+            $response = $this->client->request('GET', rtrim($this->baseUrl, '/') . '/cities/airports', $options);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 
     public function searchFlights($data)

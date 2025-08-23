@@ -18,6 +18,31 @@ Route::get('/blog-single', function () {
     return view('blog-single');
 });
 
+Route::get('/blog/{slug}', [App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
+
+// API routes for flights
+Route::get('/api/cities-airports', [App\Http\Controllers\FlightController::class, 'getCitiesAndAirports']);
+
+// Test route for debugging
+Route::get('/test-cities-api', [App\Http\Controllers\TestController::class, 'testCitiesApi']);
+
+// Simple API test
+Route::get('/simple-api-test', function () {
+    try {
+        $apiService = new App\Services\TravelvelaApiService();
+        $response = $apiService->getCitiesAndAirports();
+
+        if (isset($response['error'])) {
+            return response("<h1>API Error</h1><p>{$response['error']}</p><p>You are seeing only 3 cities because the API failed and the system is using fallback data.</p>");
+        }
+
+        $count = is_array($response) ? count($response) : 0;
+        return response("<h1>API Success</h1><p>Found {$count} cities/airports</p><p>This means the API is working and you should see more than 3 cities in the dropdown.</p>");
+    } catch (Exception $e) {
+        return response("<h1>Exception</h1><p>{$e->getMessage()}</p><p>You are seeing only 3 cities because the API failed and the system is using fallback data.</p>");
+    }
+});
+
 Route::get('/checkout', function () {
     return view('checkout');
 });

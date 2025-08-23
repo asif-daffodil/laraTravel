@@ -3020,5 +3020,741 @@
     ================================= -->
 @endsection
 @section('scripts')
+    <script type="text/javascript">
+        // Quiet mode: suppress non-error console output unless debug flag is set
+        (function() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const debug = params.get('debug') === '1';
+                if (!debug && typeof console !== 'undefined') {
+                    console.log = function() {};
+                    console.info = function() {};
+                    console.warn = function() {};
+                    // keep console.error so real errors are still visible
+                }
+            } catch (e) {
+                // ignore; don't break page if URLSearchParams unavailable
+            }
+        })();
 
+        var activeDropdownId = null;
+        let currentSearchWidget = null;
+        let focusedIndex = -1;
+        let citiesAndAirports = [];
+
+        // Load cities and airports data on page load
+    document.addEventListener('DOMContentLoaded', function() {
+            // Add CSS for focused dropdown items
+            const style = document.createElement('style');
+            style.textContent = `
+                .s-widget-dropdown-item.focused {
+                    background-color: #f8f9fa;
+                    border-left: 3px solid #007bff;
+                }
+                .no-results {
+                    padding: 10px;
+                    text-align: center;
+                    color: #6c757d;
+                    font-style: italic;
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Normalize dropdown IDs: assign deterministic unique ids to each dropdown
+            // (fixes duplicated hard-coded id="dropdown1" occurrences in the template)
+            (function normalizeDropdownIds() {
+                const dropdowns = document.querySelectorAll('.s-select-widget-dropdown');
+                dropdowns.forEach((d, idx) => {
+                    // give each dropdown a stable id
+                    d.id = 's-select-widget-dropdown-' + idx;
+                });
+            })();
+
+            loadCitiesAndAirports();
+        });
+        function normalizeCitiesInput(input) {
+            // Accept array-like inputs, keyed objects, or wrapped { success, data }
+            if (!input) return [];
+            // If input is already an array, return it
+            if (Array.isArray(input)) return input;
+
+            // If input is a wrapper like { data: [...] } or { data: { data: [...] } }
+            if (input && typeof input === 'object') {
+                // direct data array
+                if (Array.isArray(input.data)) return input.data;
+                // nested data.data array
+                if (input.data && Array.isArray(input.data.data)) return input.data.data;
+
+                // If input itself is an object with numeric keys (0,1,2...) convert to array
+                const arr = [];
+                Object.keys(input).forEach(k => {
+                    // ignore non-numeric keys like 'success' or 'meta'
+                    if (/^\d+$/.test(k)) {
+                        const v = input[k];
+                        if (v) arr.push(v);
+                    }
+                });
+                if (arr.length) return arr;
+
+                // Last-resort: try to collect any values that look like airport records
+                const fallback = [];
+                Object.keys(input).forEach(k => {
+                    const v = input[k];
+                    if (v && (v.city || v.airport_code || v.airport_name)) fallback.push(v);
+                });
+                if (fallback.length) return fallback;
+            }
+
+            return [];
+        }
+
+        // Pick the best human-readable label for a city/airport record
+        function resolveLocationLabel(item) {
+            if (!item) return '';
+
+            // Prefer explicit city name fields
+            const stringFields = ['city_name', 'cityName', 'city', 'name', 'airport_name', 'airportName', 'municipality', 'locality'];
+            for (const f of stringFields) {
+                if (Object.prototype.hasOwnProperty.call(item, f)) {
+                    const v = item[f];
+                    if (typeof v === 'string' && v.trim()) return v.trim();
+                }
+            }
+
+            // If city is an object, look for nested name
+            if (item.city && typeof item.city === 'object') {
+                if (item.city.name && typeof item.city.name === 'string') return item.city.name.trim();
+                if (item.city.city_name && typeof item.city.city_name === 'string') return item.city.city_name.trim();
+            }
+
+            // Fallbacks: airport code or numeric id (avoid showing raw numeric id if possible)
+            if (item.airport_code && typeof item.airport_code === 'string') return item.airport_code;
+            if (item.code && typeof item.code === 'string') return item.code;
+            if (typeof item.city === 'number') return 'City ' + item.city;
+            if (typeof item.name === 'number') return 'Item ' + item.name;
+
+            return '';
+        }
+
+        async function loadCitiesAndAirports() {
+            try {
+                const response = await fetch('/api/cities-airports');
+                console.log('API Response status:', response.status);
+
+                const result = await response.json();
+                console.log('API Result:', result);
+
+                // Normalize possible response shapes
+                let normalized = [];
+                // handle shapes: array, { data: [...] }, { data: { data: [...] } }, or nested wrappers
+                if (Array.isArray(result)) normalized = result;
+                else if (result && result.data) normalized = normalizeCitiesInput(result.data);
+                else normalized = normalizeCitiesInput(result);
+
+                if (normalized.length) {
+                    citiesAndAirports = normalized;
+                    console.log('Cities and airports loaded:', citiesAndAirports.length, 'items');
+                    populateDropdowns();
+                    return;
+                }
+
+                console.warn('Initial load did not return usable data, trying force-refresh...');
+                // Try once more bypassing cache on server
+                const resp2 = await fetch('/api/cities-airports?force=1');
+                const result2 = await resp2.json();
+                let normalized2 = [];
+                if (Array.isArray(result2)) normalized2 = result2;
+                else if (result2 && result2.data) normalized2 = normalizeCitiesInput(result2.data);
+                else normalized2 = normalizeCitiesInput(result2);
+                if (normalized2.length) {
+                    citiesAndAirports = normalized2;
+                    console.log('Cities and airports loaded after force refresh:', citiesAndAirports.length);
+                    populateDropdowns();
+                    return;
+                }
+
+                console.error('Failed to load cities and airports from API (both attempts).', (result && result.error) || (result2 && result2.error) || null);
+                // Only use fallback if API is unreachable
+                citiesAndAirports = getStaticCitiesData();
+                console.log('Using fallback data:', citiesAndAirports.length, 'items');
+                populateDropdowns();
+            } catch (error) {
+                console.error('Error loading cities and airports:', error);
+                // Try force-refresh once in case cache caused the issue
+                try {
+                    const resp = await fetch('/api/cities-airports?force=1');
+                    const resj = await resp.json();
+                    const normalizedJ = resj && resj.data ? normalizeCitiesInput(resj.data) : normalizeCitiesInput(resj);
+                    if (normalizedJ.length) {
+                        citiesAndAirports = normalizedJ;
+                        console.log('Cities and airports loaded after retry:', citiesAndAirports.length);
+                        populateDropdowns();
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Retry failed:', e);
+                }
+
+                // Fallback to static data if API fails
+                citiesAndAirports = getStaticCitiesData();
+                console.log('Using fallback data due to error:', citiesAndAirports.length, 'items');
+                populateDropdowns();
+            }
+        }
+
+        // Attach jQuery event handlers: poll for jQuery for a short time then bind
+        (function attachJQueryHandlers() {
+            let attempts = 0;
+            const maxAttempts = 25; // poll up to ~5 seconds (25 * 200ms)
+            const interval = setInterval(() => {
+                attempts++;
+                if (window.jQuery) {
+                    const $ = window.jQuery;
+                    const debounced = debounce(function(e) {
+                        const input = e.target;
+                        const val = input.value;
+                        const dropdown = $(input).closest('.search-select-widget').find(
+                            '.s-select-widget-dropdown')[0];
+                        if (dropdown) {
+                            fetchSuggestionsAjax(val, dropdown);
+                        }
+                    }, 250);
+
+                    // Bind to both input fields and inline search inputs inside the dropdown
+                    $(document).on('keyup change',
+                        '.search-input-field, .select-widget-dropdown-search input[name="search"]',
+                        function(e) {
+                            debounced(e);
+                        });
+
+                    clearInterval(interval);
+                } else if (attempts >= maxAttempts) {
+                    // stop trying
+                    clearInterval(interval);
+                }
+            }, 200);
+        })();
+
+        function getStaticCitiesData() {
+            // Enhanced fallback static data to test if the system is working
+            return [{
+                    city: "Dhaka",
+                    country: "Bangladesh",
+                    airport_name: "Hazrat Shahjalal International Airport",
+                    airport_code: "DAC"
+                },
+                {
+                    city: "Cox's Bazar",
+                    country: "Bangladesh",
+                    airport_name: "Cox's Bazar Airport",
+                    airport_code: "CXB"
+                },
+                {
+                    city: "Chittagong",
+                    country: "Bangladesh",
+                    airport_name: "Shah Amanat International Airport",
+                    airport_code: "CGP"
+                },
+                {
+                    city: "Sylhet",
+                    country: "Bangladesh",
+                    airport_name: "Osmani International Airport",
+                    airport_code: "ZYL"
+                },
+                {
+                    city: "Rajshahi",
+                    country: "Bangladesh",
+                    airport_name: "Shah Makhdum Airport",
+                    airport_code: "RJH"
+                },
+                {
+                    city: "Dubai",
+                    country: "UAE",
+                    airport_name: "Dubai International Airport",
+                    airport_code: "DXB"
+                },
+                {
+                    city: "London",
+                    country: "United Kingdom",
+                    airport_name: "Heathrow Airport",
+                    airport_code: "LHR"
+                },
+                {
+                    city: "New York",
+                    country: "United States",
+                    airport_name: "John F. Kennedy International Airport",
+                    airport_code: "JFK"
+                },
+                {
+                    city: "Bangkok",
+                    country: "Thailand",
+                    airport_name: "Suvarnabhumi Airport",
+                    airport_code: "BKK"
+                },
+                {
+                    city: "Singapore",
+                    country: "Singapore",
+                    airport_name: "Changi Airport",
+                    airport_code: "SIN"
+                }
+            ];
+        }
+
+        function populateDropdowns() {
+            console.log('Populating dropdowns with', citiesAndAirports.length, 'cities');
+            const dropdowns = document.querySelectorAll('.s-select-widget-dropdown');
+            console.log('Found', dropdowns.length, 'dropdowns');
+
+            dropdowns.forEach((dropdown, index) => {
+                console.log('Processing dropdown', index);
+                // Clear ALL existing items but keep the search input if present
+                const searchDiv = dropdown.querySelector('.select-widget-dropdown-search');
+                dropdown.innerHTML = '';
+                if (searchDiv) {
+                    // Ensure the searchDiv contains a suggestions container for city suggestions
+                    if (!searchDiv.querySelector('.suggestions-list')) {
+                        const suggestions = document.createElement('div');
+                        suggestions.className = 'suggestions-list';
+                        suggestions.style.display = 'none';
+                        suggestions.style.padding = '6px 10px';
+                        suggestions.style.borderBottom = '1px solid #eee';
+                        searchDiv.appendChild(suggestions);
+                    }
+                    dropdown.appendChild(searchDiv);
+                }
+
+                // Add cities/airports from API
+                citiesAndAirports.forEach(item => {
+                    const dropdownItem = createDropdownItem(item);
+                    dropdown.appendChild(dropdownItem);
+                });
+
+                console.log('Added', citiesAndAirports.length, 'items to dropdown', index);
+            });
+        }
+
+        function createDropdownItem(cityData) {
+            const div = document.createElement('div');
+            div.className = 's-widget-dropdown-item';
+            div.setAttribute('onclick', 'selectItem(this)');
+            const label = resolveLocationLabel(cityData) || (cityData.city || cityData.name || 'Unknown');
+            const code = cityData.airport_code || cityData.code || '';
+            const details = `${cityData.country || ''}${cityData.airport_name ? ', ' + cityData.airport_name : ''}${code ? ' (' + code + ')' : ''}`.trim();
+
+            div.setAttribute('data-airport', label);
+            div.setAttribute('data-details', details);
+            div.setAttribute('data-code', code);
+
+            div.innerHTML = `
+                <div class="s-widget-dropdown-data">
+                    <div class="s-widget-dropdown-data-right">
+                        <span><i class="la la-map-marker form-icon"></i>${label}</span>
+                        <p>${details}</p>
+                    </div>
+                    <h6>${code}</h6>
+                </div>
+            `;
+
+            return div;
+        }
+
+        // New function for activating search mode
+        function activateSearch(inputElement) {
+            // Close any other active search
+            if (currentSearchWidget && currentSearchWidget !== inputElement) {
+                const otherSearchField = currentSearchWidget.querySelector(
+                    ".search-input-field"
+                );
+                const otherResultsContainer =
+                    currentSearchWidget.parentElement.querySelector(
+                        ".s-select-widget-dropdown"
+                    );
+                currentSearchWidget.classList.remove("search-mode");
+                otherResultsContainer.classList.remove("active");
+            }
+
+            // Reset state and activate current widget
+            currentSearchWidget = inputElement;
+            focusedIndex = -1;
+
+            inputElement.classList.add("search-mode");
+
+            const searchField = inputElement.querySelector(".search-input-field");
+            const resultsContainer = inputElement.parentElement.querySelector(
+                ".s-select-widget-dropdown"
+            );
+
+            // Clear previous search and show all results
+            searchField.value = "";
+            showAllResults(resultsContainer);
+            resultsContainer.classList.add("active");
+            activeDropdownId = resultsContainer.id;
+
+            // Focus on the input field
+            setTimeout(() => {
+                searchField.focus();
+            }, 100);
+        }
+
+        function deactivateSearch(searchField) {
+            // Only deactivate if it's actually blurred (not when selecting with keyboard)
+            setTimeout(() => {
+                // Check if the search field is still focused or if we're in the middle of selection
+                if (document.activeElement !== searchField && currentSearchWidget) {
+                    const inputElement = searchField.parentElement;
+                    const resultsContainer = inputElement.parentElement.querySelector(
+                        ".s-select-widget-dropdown"
+                    );
+
+                    inputElement.classList.remove("search-mode");
+                    resultsContainer.classList.remove("active");
+                    currentSearchWidget = null;
+                    focusedIndex = -1;
+                    activeDropdownId = null;
+                }
+            }, 150);
+        }
+
+        function showAllResults(resultsContainer) {
+            const items = resultsContainer.querySelectorAll(
+                ".s-widget-dropdown-item"
+            );
+            items.forEach((item) => {
+                item.style.display = "block";
+                item.classList.remove("focused");
+            });
+
+            const noResultsMsg = resultsContainer.querySelector(".no-results");
+            if (noResultsMsg) {
+                noResultsMsg.style.display = "none";
+            }
+        }
+
+        function toggleDropdown(element, dropdownId) {
+            // This function is kept for compatibility but now redirects to activateSearch
+            activateSearch(element);
+        }
+
+        function selectItem(item) {
+            const widget = item.closest(".search-select-widget");
+            const inputBox = widget.querySelector(".s-select-input-data");
+            const selectedItemData = item.querySelector(
+                ".s-widget-dropdown-data-right"
+            ).innerHTML;
+            const inputElement = widget.querySelector(".search-select-input");
+            const searchField = inputElement.querySelector(".search-input-field");
+
+            inputBox.innerHTML =
+                '<div class="s-select-input-data-right">' +
+                selectedItemData +
+                "</div>";
+
+            // Hide the h6 tag when an item is selected
+            var relatedH6 = item.parentElement.parentElement.querySelector("h6");
+            if (relatedH6) {
+                relatedH6.style.display = "none";
+            }
+
+            // Clear search field
+            searchField.value = "";
+            searchField.blur();
+
+            // Deactivate search mode
+            inputElement.classList.remove("search-mode");
+            item.parentElement.classList.remove("active");
+
+            // Reset state properly
+            currentSearchWidget = null;
+            focusedIndex = -1;
+            activeDropdownId = null;
+
+            // Remove any focus from search field
+            setTimeout(() => {
+                if (document.activeElement === searchField) {
+                    searchField.blur();
+                }
+            }, 50);
+
+            // Reset the search input for all other dropdowns
+            var allDropdowns = document.querySelectorAll(
+                ".s-select-widget-dropdown"
+            );
+            allDropdowns.forEach(function(otherDropdown) {
+                var searchInput = otherDropdown.querySelector("input[name='search']");
+                if (searchInput) {
+                    searchInput.value = ""; // Clear the search input
+                    filterDropdown("", otherDropdown); // Reset search results
+                }
+            });
+        }
+
+        function filterDropdown(keyword, dropdown) {
+            var items = dropdown.querySelectorAll(".s-widget-dropdown-item");
+            keyword = keyword.toLowerCase();
+            let visibleCount = 0;
+
+            items.forEach(function(item) {
+                const airport = item.dataset.airport ?
+                    item.dataset.airport.toLowerCase() :
+                    "";
+                const details = item.dataset.details ?
+                    item.dataset.details.toLowerCase() :
+                    "";
+                const code = item.dataset.code ? item.dataset.code.toLowerCase() : "";
+                var itemData = item
+                    .querySelector(".s-widget-dropdown-data")
+                    .textContent.toLowerCase();
+
+                const isMatch =
+                    itemData.includes(keyword) ||
+                    airport.includes(keyword) ||
+                    details.includes(keyword) ||
+                    code.includes(keyword);
+
+                if (isMatch) {
+                    item.style.display = "block";
+                    item.classList.remove("focused");
+                    visibleCount++;
+                } else {
+                    item.style.display = "none";
+                }
+            });
+
+            // Show/hide no results message
+            let noResultsMsg = dropdown.querySelector(".no-results");
+            if (visibleCount === 0 && keyword.length > 0) {
+                if (!noResultsMsg) {
+                    noResultsMsg = document.createElement("div");
+                    noResultsMsg.className = "no-results";
+                    noResultsMsg.textContent = "No airports found";
+                    dropdown.appendChild(noResultsMsg);
+                }
+                noResultsMsg.style.display = "block";
+            } else if (noResultsMsg) {
+                noResultsMsg.style.display = "none";
+            }
+        }
+
+        // Render a small list of unique city-name suggestions above the results
+        function renderSuggestions(keyword, dropdown) {
+            const suggestionsContainer = dropdown.querySelector('.suggestions-list');
+            if (!suggestionsContainer) return;
+
+            const q = (keyword || '').trim().toLowerCase();
+            if (q.length === 0) {
+                suggestionsContainer.style.display = 'none';
+                suggestionsContainer.innerHTML = '';
+                return;
+            }
+
+            // Get unique city names from citiesAndAirports that contain the query
+            const seen = new Set();
+            const suggestions = [];
+            for (let i = 0; i < citiesAndAirports.length; i++) {
+                const city = (citiesAndAirports[i].city || citiesAndAirports[i].name || '').trim();
+                if (!city) continue;
+                const cityLower = city.toLowerCase();
+                // Match if substring or subsequence (loose match to handle partial typing like 'kal' -> 'kolkata')
+                if ((cityLower.includes(q) || isSubsequence(q, cityLower)) && !seen.has(cityLower)) {
+                    seen.add(cityLower);
+                    suggestions.push(city);
+                    if (suggestions.length >= 6) break;
+                }
+            }
+
+            if (suggestions.length === 0) {
+                suggestionsContainer.style.display = 'none';
+                suggestionsContainer.innerHTML = '';
+                return;
+            }
+
+            suggestionsContainer.innerHTML = '';
+            suggestions.forEach(s => {
+        const el = document.createElement('div');
+        el.className = 'suggestion-item';
+        // If suggestion is an object (from citiesAndAirports), resolve a friendly label
+        const display = (typeof s === 'string') ? s : resolveLocationLabel(s) || (s.city || s.name || '');
+        el.textContent = display;
+                el.style.padding = '6px 8px';
+                el.style.cursor = 'pointer';
+                el.style.borderRadius = '3px';
+                el.addEventListener('mouseenter', () => el.style.background = '#f1f3f5');
+                el.addEventListener('mouseleave', () => el.style.background = 'transparent');
+                el.addEventListener('click', () => {
+                    // When clicking a suggestion, set the search input to that city and filter
+                    const input = dropdown.querySelector("input[name='search'], .search-input-field");
+                    if (input) {
+            input.value = display;
+                        filterDropdown(s, dropdown);
+                    }
+                    // hide suggestions after click
+                    suggestionsContainer.style.display = 'none';
+                });
+                suggestionsContainer.appendChild(el);
+            });
+
+            suggestionsContainer.style.display = 'block';
+        }
+
+        function clearSuggestions(dropdown) {
+            const suggestionsContainer = dropdown.querySelector('.suggestions-list');
+            if (suggestionsContainer) {
+                suggestionsContainer.innerHTML = '';
+                suggestionsContainer.style.display = 'none';
+            }
+        }
+
+        // Loose subsequence matcher: returns true if small is a subsequence of big
+        function isSubsequence(small, big) {
+            if (!small) return true;
+            let i = 0, j = 0;
+            while (i < small.length && j < big.length) {
+                if (small[i] === big[j]) i++;
+                j++;
+            }
+            return i === small.length;
+        }
+
+        // Debounce helper
+        function debounce(fn, wait) {
+            let t;
+            return function(...args) {
+                clearTimeout(t);
+                t = setTimeout(() => fn.apply(this, args), wait);
+            };
+        }
+
+        // Fetch cities/airports from local API via jQuery AJAX and update suggestions
+        async function fetchSuggestionsAjax(keyword, dropdown) {
+            // Use fetch() instead of jQuery to avoid load-order and dependency issues
+            try {
+                const url = '/api/cities-airports' + ((keyword && keyword.length >= 3) ? '?force=1' : '');
+                console.log('Fetching suggestions from', url, 'for query', keyword);
+                const resp = await fetch(url, { cache: 'no-cache' });
+                const json = await resp.json();
+                console.log('Fetch suggestions raw response:', json);
+
+                // Use the normalization helper to extract any array from the API shape
+                const data = normalizeCitiesInput(json);
+                if (data && data.length > 0) {
+                    citiesAndAirports = data;
+                } else {
+                    console.warn('No array data returned from fetch; keeping existing citiesAndAirports');
+                }
+
+                renderSuggestions(keyword, dropdown);
+                filterDropdown(keyword, dropdown);
+            } catch (e) {
+                console.warn('fetchSuggestionsAjax failed:', e);
+                // fallback to client-side
+                renderSuggestions(keyword, dropdown);
+                filterDropdown(keyword, dropdown);
+            }
+        }
+
+        // Add this function for real-time filtering as the user types
+        function handleSearchInput(inputElement) {
+            var searchValue = inputElement.value;
+            let dropdown;
+
+            if (inputElement.classList.contains("search-input-field")) {
+                // New search field
+                dropdown = inputElement
+                    .closest(".search-select-widget")
+                    .querySelector(".s-select-widget-dropdown");
+            } else {
+                // Original search field
+                dropdown = document.getElementById(activeDropdownId);
+            }
+
+            if (dropdown) {
+                // Ensure results container is visible
+                dropdown.classList.add('active');
+                // If jQuery is present we will fetch fresh list via AJAX and render suggestions
+                if (window.jQuery) {
+                    fetchSuggestionsAjax(searchValue, dropdown);
+                } else {
+                    // Fallback: use in-memory data and render suggestions client-side
+                    renderSuggestions(searchValue, dropdown);
+                    filterDropdown(searchValue, dropdown);
+                }
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener("keydown", function(event) {
+            if (currentSearchWidget) {
+                const resultsContainer =
+                    currentSearchWidget.parentElement.querySelector(
+                        ".s-select-widget-dropdown"
+                    );
+                const visibleItems = Array.from(
+                    resultsContainer.querySelectorAll(".s-widget-dropdown-item")
+                ).filter((item) => item.style.display !== "none");
+
+                if (event.key === "ArrowDown") {
+                    event.preventDefault();
+                    focusedIndex = Math.min(focusedIndex + 1, visibleItems.length - 1);
+                    updateFocus(visibleItems);
+                } else if (event.key === "ArrowUp") {
+                    event.preventDefault();
+                    focusedIndex = Math.max(focusedIndex - 1, -1);
+                    updateFocus(visibleItems);
+                } else if (event.key === "Enter") {
+                    event.preventDefault();
+                    if (focusedIndex >= 0 && visibleItems[focusedIndex]) {
+                        selectItem(visibleItems[focusedIndex]);
+                        // Ensure the search field loses focus completely
+                        const searchField = currentSearchWidget.querySelector(
+                            ".search-input-field"
+                        );
+                        searchField.blur();
+                    }
+                } else if (event.key === "Escape") {
+                    event.preventDefault();
+                    const searchField = currentSearchWidget.querySelector(
+                        ".search-input-field"
+                    );
+                    // Force close
+                    const inputElement = searchField.parentElement;
+                    const resultsContainer = inputElement.parentElement.querySelector(
+                        ".s-select-widget-dropdown"
+                    );
+
+                    inputElement.classList.remove("search-mode");
+                    resultsContainer.classList.remove("active");
+                    currentSearchWidget = null;
+                    focusedIndex = -1;
+                    activeDropdownId = null;
+                    searchField.blur();
+                }
+            }
+        });
+
+        function updateFocus(visibleItems) {
+            visibleItems.forEach((item, index) => {
+                if (index === focusedIndex) {
+                    item.classList.add("focused");
+                    item.scrollIntoView({
+                        block: "nearest"
+                    });
+                } else {
+                    item.classList.remove("focused");
+                }
+            });
+        }
+
+        // Click outside to close
+        document.addEventListener("click", function(event) {
+            if (
+                currentSearchWidget &&
+                !event.target.closest(".search-select-widget")
+            ) {
+                const searchField = currentSearchWidget.querySelector(
+                    ".search-input-field"
+                );
+                deactivateSearch(searchField);
+            }
+        });
+    </script>
 @endsection

@@ -1,6 +1,66 @@
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('https://admin.travelvela.com/api/get/blog/categories', {
+        method: 'GET',
+        headers: {
+            'Authorization': 'TravelVela-DYSBW7537NUDD7078',
+            'username': 'genesis',
+            'password': 'ERTYUIO87347854',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && Array.isArray(data.data)) {
+            var sidebar = document.getElementById('sidebar-category');
+            if (sidebar) {
+                sidebar.innerHTML = '';
+                data.data.forEach(function(cat) {
+                    var wrapper = document.createElement('div');
+                    wrapper.className = 'custom-checkbox';
+
+                    var input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.className = 'form-check-input';
+                    input.id = 'cat-' + cat.id;
+
+                    var label = document.createElement('label');
+                    label.setAttribute('for', input.id);
+                    label.innerHTML = '<a href="/blog-category/' + cat.slug + '">' + cat.title + '</a>';
+
+                    wrapper.appendChild(input);
+                    wrapper.appendChild(label);
+                    sidebar.appendChild(wrapper);
+                });
+            }
+        }
+    });
+});
+</script>
 @extends('layouts.app', ['style' => 'style-2'])
 
-@section('title', 'Blog Single')
+@section('title', isset($blog['meta_title']) ? $blog['meta_title'] : (isset($blog['title']) ? $blog['title'] : 'Blog Single'))
+
+@push('meta')
+    @if(isset($blog['meta_description']))
+        <meta name="description" content="{{ $blog['meta_description'] }}">
+    @endif
+    @if(isset($blog['meta_keywords']))
+        <meta name="keywords" content="{{ $blog['meta_keywords'] }}">
+    @endif
+    @if(isset($blog['meta_autor']))
+        <meta name="author" content="{{ $blog['meta_autor'] }}">
+    @endif
+    @if(isset($blog['title']))
+        <meta property="og:title" content="{{ $blog['title'] }}">
+    @endif
+    @if(isset($blog['short_description']))
+        <meta property="og:description" content="{{ $blog['short_description'] }}">
+    @endif
+    @if(isset($blog['image']))
+        <meta property="og:image" content="https://admin.travelvela.com/{{ $blog['image'] }}">
+    @endif
+@endpush
 
 @section('content')
     <!-- ================================
@@ -13,7 +73,7 @@
                     <div class="col-lg-6">
                         <div class="breadcrumb-content">
                             <div class="section-heading">
-                                <h2 class="sec__title text-white">Blog Details</h2>
+                                <h2 class="sec__title text-white">{{ isset($blog['title']) ? $blog['title'] : 'Blog Details' }}</h2>
                             </div>
                         </div>
                         <!-- end breadcrumb-content -->
@@ -54,146 +114,48 @@
                 <div class="col-lg-8">
                     <div class="card-item blog-card blog-card-layout-2 blog-single-card mb-5">
                         <div class="card-img before-none">
-                            <img src="images/img20.jpg" alt="blog-img" />
+                            @if(isset($blog['image']) && $blog['image'])
+                                <img src="https://admin.travelvela.com/{{ $blog['image'] }}" alt="{{ $blog['title'] ?? 'Blog Image' }}" />
+                            @else
+                                <img src="images/img20.jpg" alt="blog-img" />
+                            @endif
                         </div>
                         <div class="card-body px-0 pb-0">
                             <div class="post-categories">
-                                <a href="#" class="badge">Travel</a>
-                                <a href="#" class="badge">lifestyle</a>
+                                @if(isset($blog['category_name']))
+                                    <a href="#" class="badge">{{ $blog['category_name'] }}</a>
+                                @endif
                             </div>
                             <h3 class="card-title font-size-28">
-                                When Traveling Avoid Expensive Hotels &amp; Resorts
+                                {{ $blog['title'] ?? 'Blog Title' }}
                             </h3>
                             <p class="card-meta pb-3">
-                                <span class="post__author">By <a href="#" class="text-gray">John Doe</a></span>
-                                <span class="post-dot"></span>
-                                <span class="post__date"> 1 January, 2020</span>
-                                <span class="post-dot"></span>
-                                <span class="post__time"><a href="#" class="text-gray">4 Comments</a></span>
-                                <span class="post-dot"></span>
-                                <span class="post__time"><a href="#" class="text-gray">202 Likes</a></span>
+                                @if(isset($blog['meta_autor']))
+                                    <span class="post__author">By <a href="#" class="text-gray">{{ $blog['meta_autor'] }}</a></span>
+                                    <span class="post-dot"></span>
+                                @endif
+                                @if(isset($blog['entry_date']))
+                                    <span class="post__date">{{ \Carbon\Carbon::parse($blog['entry_date'])->format('F j, Y') }}</span>
+                                @endif
                             </p>
                             <div class="section-block"></div>
-                            <p class="card-text py-3">
-                                Simple point-and-shoot digital cameras can give surprising
-                                quality when they have the right lenses and sensors. Because
-                                they are totally automatic in focus and exposure, they just
-                                have to be pointed at a subject and clicked. They have limited
-                                capabilities for controlling the image
-                            </p>
-                            <p class="card-text pb-3">
-                                Suspendisse ullamcorper lacus et commodo laoreet. Sed sodales
-                                aliquet felis, quis volutpat massa imperdiet in. Praesent
-                                rutrum malesuada risus, ullamcorper pretium tortor
-                            </p>
-                            <div class="photo-block-gallery">
-                                <h3 class="title pb-2">Travelling Highlight</h3>
-                                <p class="card-text pb-4">
-                                    Quodsi sanctus pro eu, ne audire scripserit quo. Vel an enim
-                                    offendit salutandi, in eos quod omnes epicurei, ex veri
-                                    qualisque scriptorem mei.
+                            @if(isset($blog['short_description']))
+                                <p class="card-text py-3">
+                                    {{ $blog['short_description'] }}
                                 </p>
-                                <div class="row">
-                                    <div class="col-lg-4 responsive-column">
-                                        <div class="photo-block-item">
-                                            <a href="images/destination-img2.jpg" data-fancybox="gallery"
-                                                data-caption="Showing image - 01" data-speed="700">
-                                                <img src="images/destination-img2.jpg" alt="img" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <!-- end col-lg-4 -->
-                                    <div class="col-lg-4 responsive-column">
-                                        <div class="photo-block-item">
-                                            <a href="images/destination-img3.jpg" data-fancybox="gallery"
-                                                data-caption="Showing image - 02" data-speed="700">
-                                                <img src="images/destination-img3.jpg" alt="img" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <!-- end col-lg-4 -->
-                                    <div class="col-lg-4 responsive-column">
-                                        <div class="photo-block-item">
-                                            <a href="images/destination-img4.jpg" data-fancybox="gallery"
-                                                data-caption="Showing image - 03" data-speed="700">
-                                                <img src="images/destination-img4.jpg" alt="img" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <!-- end col-lg-4 -->
-                                    <div class="col-lg-6 responsive-column">
-                                        <div class="photo-block-item">
-                                            <a href="images/destination-img5.jpg" data-fancybox="gallery"
-                                                data-caption="Showing image - 04" data-speed="700">
-                                                <img src="images/destination-img5.jpg" alt="img" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <!-- end col-lg-6 -->
-                                    <div class="col-lg-6 responsive-column">
-                                        <div class="photo-block-item">
-                                            <a href="images/destination-img6.jpg" data-fancybox="gallery"
-                                                data-caption="Showing image - 05" data-speed="700">
-                                                <img src="images/destination-img6.jpg" alt="img" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <!-- end col-lg-6 -->
+                            @endif
+                            @if(isset($blog['description']))
+                                <div class="blog-content">
+                                    {!! $blog['description'] !!}
                                 </div>
-                                <!-- end row -->
-                            </div>
-                            <p class="card-text padding-bottom-35px">
-                                Duis mollis, est non commodo luctus, nisi erat porttitor
-                                ligula, eget lacinia odio sem nec elit. Cras mattis
-                                consectetur purus sit amet fermentum. Morbi leo risus, porta
-                                ac consectetur ac, vestibulum at eros. Praesent commodo cursus
-                                magna, vel scelerisque nisl consectetur et.
-                            </p>
-                            <div class="blockquote-item margin-bottom-35px">
-                                <blockquote class="mb-0">
-                                    <p class="blockquote__text">
-                                        Creativity is just connecting things. When you ask
-                                        creative people how they did something, they feel a little
-                                        guilty because they didn't really do it, they just saw
-                                        something. It seemed obvious to them after a while. That's
-                                        because they were able to connect experiences they've had
-                                        and synthesize new things.
-                                    </p>
-                                    <h4 class="blockquote__meta">
-                                        - Steve Jobs <span>Founder of Apple Inc.</span>
-                                    </h4>
-                                </blockquote>
-                            </div>
-                            <h3 class="title">Make better travel decisions</h3>
-                            <p class="card-text pt-3 pb-4">
-                                Duis mollis, est non commodo luctus, nisi erat porttitor
-                                ligula, eget lacinia odio sem nec elit. Cras mattis
-                                consectetur purus sit amet fermentum. Morbi leo risus, porta
-                                ac consectetur ac, vestibulum at eros. Vestibulum id ligula
-                                porta felis euismod semper. Donec id elit non mi porta gravida
-                                at eget metus. Vestibulum id ligula porta felis euismod semper
-                            </p>
-                            <div class="section-block"></div>
-                            <h3 class="title pt-4">Getting Started</h3>
-                            <p class="card-text py-3">
-                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                                eaque ipsa quae ab illo inventore incididunt ut labore et
-                                dolore magna Boot camps have its supporters and its
-                                detractors. Some people do not understand why you should have
-                                to spend money on boot camp when you can get the MCSE study
-                                materials yourself at a fraction of the camp price.
-                            </p>
-                            <p class="card-text pb-4">
-                                However, who has the willpower to actually sit through a
-                                self-imposed MCSE training. who has the willpower to actually
-                                sit through a self-imposed
-                            </p>
-                            <div class="section-block"></div>
+                            @endif
                             <div class="post-tag-wrap d-flex align-items-center justify-content-between py-4">
                                 <ul class="tag-list">
-                                    <li><a href="#">Tour</a></li>
-                                    <li><a href="#">Nature</a></li>
-                                    <li><a href="#">Beaches</a></li>
+                                    @if(isset($blog['tags']) && $blog['tags'])
+                                        @foreach(explode(',', $blog['tags']) as $tag)
+                                            <li><a href="#">{{ trim($tag) }}</a></li>
+                                        @endforeach
+                                    @endif
                                 </ul>
                                 <div class="post-share">
                                     <ul>
@@ -553,7 +515,7 @@
                         <!-- end sidebar-widget -->
                         <div class="sidebar-widget">
                             <h3 class="title stroke-shape">Categories</h3>
-                            <div class="sidebar-category">
+                            <div id="sidebar-category" class="sidebar-category">
                                 <div class="custom-checkbox">
                                     <input type="checkbox" class="form-check-input" id="cat1" />
                                     <label for="cat1">All <span class="font-size-13 ms-1">(55)</span></label>
@@ -651,7 +613,7 @@
                                     <div class="card-item card-item-list recent-post-card">
                                         <div class="card-img">
                                             <a href="blog-single.html" class="d-block">
-                                                <img src="images/small-img4.jpg" alt="blog-img" />
+                                                <img src="{{ asset('images/small-img4.jpg') }}" alt="blog-img" />
                                             </a>
                                         </div>
                                         <div class="card-body">
@@ -669,7 +631,7 @@
                                     <div class="card-item card-item-list recent-post-card">
                                         <div class="card-img">
                                             <a href="blog-single.html" class="d-block">
-                                                <img src="images/small-img5.jpg" alt="blog-img" />
+                                                <img src="{{ asset('images/small-img5.jpg') }}" alt="blog-img" />
                                             </a>
                                         </div>
                                         <div class="card-body">
@@ -687,7 +649,7 @@
                                     <div class="card-item card-item-list recent-post-card mb-0">
                                         <div class="card-img">
                                             <a href="blog-single.html" class="d-block">
-                                                <img src="images/small-img6.jpg" alt="blog-img" />
+                                                <img src="{{ asset('images/small-img6.jpg') }}" alt="blog-img" />
                                             </a>
                                         </div>
                                         <div class="card-body">
@@ -709,7 +671,7 @@
                                     <div class="card-item card-item-list recent-post-card">
                                         <div class="card-img">
                                             <a href="blog-single.html" class="d-block">
-                                                <img src="images/small-img7.jpg" alt="blog-img" />
+                                                <img src="{{ asset('images/small-img7.jpg') }}" alt="blog-img" />
                                             </a>
                                         </div>
                                         <div class="card-body">
@@ -727,7 +689,7 @@
                                     <div class="card-item card-item-list recent-post-card">
                                         <div class="card-img">
                                             <a href="blog-single.html" class="d-block">
-                                                <img src="images/small-img8.jpg" alt="blog-img" />
+                                                <img src="{{ asset('images/small-img8.jpg') }}" alt="blog-img" />
                                             </a>
                                         </div>
                                         <div class="card-body">
@@ -745,7 +707,7 @@
                                     <div class="card-item card-item-list recent-post-card mb-0">
                                         <div class="card-img">
                                             <a href="blog-single.html" class="d-block">
-                                                <img src="images/small-img9.jpg" alt="blog-img" />
+                                                <img src="{{ asset('images/small-img9.jpg') }}" alt="blog-img" />
                                             </a>
                                         </div>
                                         <div class="card-body">
@@ -766,7 +728,7 @@
                                     <div class="card-item card-item-list recent-post-card">
                                         <div class="card-img">
                                             <a href="blog-single.html" class="d-block">
-                                                <img src="images/small-img7.jpg" alt="blog-img" />
+                                                <img src="{{ asset('images/small-img7.jpg') }}" alt="blog-img" />
                                             </a>
                                         </div>
                                         <div class="card-body">
@@ -784,7 +746,7 @@
                                     <div class="card-item card-item-list recent-post-card">
                                         <div class="card-img">
                                             <a href="blog-single.html" class="d-block">
-                                                <img src="images/small-img8.jpg" alt="blog-img" />
+                                                <img src="{{ asset('images/small-img8.jpg') }}" alt="blog-img" />
                                             </a>
                                         </div>
                                         <div class="card-body">
@@ -802,7 +764,7 @@
                                     <div class="card-item card-item-list recent-post-card mb-0">
                                         <div class="card-img">
                                             <a href="blog-single.html" class="d-block">
-                                                <img src="images/small-img9.jpg" alt="blog-img" />
+                                                <img src="{{ asset('images/small-img9.jpg') }}" alt="blog-img" />
                                             </a>
                                         </div>
                                         <div class="card-body">
